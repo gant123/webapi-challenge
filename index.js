@@ -12,3 +12,10 @@ I need this code, just don't know where, perhaps should make some middleware, do
 
 Go code!
 */
+const server = require('./server');
+const port = 9001;
+server.listen(port, () => {
+  console.log(
+    `Oh My God!!!! Your server is running over 9000! Current Power level ${port}`
+  );
+});

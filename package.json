@@ -19,11 +19,12 @@
   },
   "homepage": "https://github.com/LambdaSchool/Sprint-Challenge-Node-Express#readme",
   "dependencies": {
+    "express": "^4.17.1",
     "helmet": "^3.18.0",
     "knex": "^0.17.1",
     "sqlite3": "^4.0.8"
   },
   "devDependencies": {
-    "knex-cleaner": "^1.1.4"
+    "knex-cleaner": "^1.2.1"
   }
 }
