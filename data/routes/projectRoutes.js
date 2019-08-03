@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
 /******************************************************************************
  *                            Get Project by Id                               *
  ******************************************************************************/
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateId, async (req, res) => {
   try {
     const project = await db.get(req.params.id);
 
@@ -57,7 +57,7 @@ router.post('/', async (req, res) => {
 /******************************************************************************
  *                            Update project                                  *
  ******************************************************************************/
-router.put('/:id', async (req, res) => {
+router.put('/:id', validateId, async (req, res) => {
   try {
     const project = await db.update(req.params.id, req.body);
     if (project) {
@@ -77,7 +77,7 @@ router.put('/:id', async (req, res) => {
 /******************************************************************************
  *                            Delete project                                  *
  ******************************************************************************/
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', validateId, async (req, res) => {
   try {
     const count = await db.remove(req.params.id);
     if (count > 0) {
@@ -97,7 +97,7 @@ router.delete('/:id', async (req, res) => {
  *         add an endpoint that returns all the actions for a project         *
  ******************************************************************************/
 //only id 1 has actions at the moment
-router.get('/:id/actions', async (req, res) => {
+router.get('/:id/actions', validateId, async (req, res) => {
   console.log(req.params.id);
   try {
     const actions = await db.getProjectActions(req.params.id);
@@ -110,5 +110,25 @@ router.get('/:id/actions', async (req, res) => {
     });
   }
 });
+
+/******************************************************************************
+ *                            custom middleware                               *
+ ******************************************************************************/
+async function validateId(req, res, next) {
+  try {
+    const { id } = req.params;
+
+    const post = await db.get(id);
+
+    if (post) {
+      req.post = post;
+      next();
+    } else {
+      res.status(404).json({ message: 'ID is not found bud!' });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+}
 
 module.exports = router;
